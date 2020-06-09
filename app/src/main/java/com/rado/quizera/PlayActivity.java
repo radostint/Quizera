@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.View;
@@ -61,25 +62,17 @@ public class PlayActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
+        MediaPlayer mp = MediaPlayer.create(this, R.raw.correct);
         mCountDown.cancel();
         if (index < totalQuestion) {
-            //ако е избран верния отговор
+            //ако е избран верния отговор се добавят 10 точки
             Button clickedButton = (Button) v;
             if (clickedButton.getText().equals(Common.questionList.get(index).getCorrectAnswer())) {
+                mp.start();
                 score += 10;
                 correctAnswer++;
-                showQuestion(++index);
-            } else {
-                //ако е избран грешен отговор
-                Intent intent = new Intent(this, DoneActivity.class);
-                Bundle sendData = new Bundle();
-                sendData.putInt("SCORE", score);
-                sendData.putInt("TOTAL", totalQuestion);
-                sendData.putInt("CORRECT", correctAnswer);
-                intent.putExtras(sendData);
-                startActivity(intent);
-                finish();
             }
+            showQuestion(++index);
             txtScore.setText(String.format("%d", score));
         }
     }
@@ -118,7 +111,19 @@ public class PlayActivity extends AppCompatActivity implements View.OnClickListe
             finish();
         }
     }
-
+    @Override
+    public void onBackPressed()
+    {
+        mCountDown.cancel();
+        Intent intent = new Intent(this, DoneActivity.class);
+        Bundle sendData = new Bundle();
+        sendData.putInt("SCORE", score);
+        sendData.putInt("TOTAL", totalQuestion);
+        sendData.putInt("CORRECT", correctAnswer);
+        intent.putExtras(sendData);
+        startActivity(intent);
+        finish();
+    }
     @Override
     protected void onPostResume() {
         super.onPostResume();

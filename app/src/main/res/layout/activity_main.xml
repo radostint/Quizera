@@ -40,7 +40,7 @@
                     android:id="@+id/fieldUsername"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Username"
+                    android:hint="Потребителско име"
                     android:inputType="text"
                     android:textColor="@color/colorPrimary"
                     android:textSize="24sp" />
@@ -49,7 +49,7 @@
                     android:id="@+id/fieldPassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Password"
+                    android:hint="Парола"
                     android:inputType="textPassword"
                     android:textColor="@color/colorPrimary"
                     android:textSize="24sp" />
@@ -70,7 +70,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Sign Up" />
+                android:text="Регистрация" />
 
             <Button
                 android:id="@+id/btn_signIn"
@@ -78,7 +78,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Sign In" />
+                android:text="Вход" />
         </LinearLayout>
     </RelativeLayout>
 </RelativeLayout>

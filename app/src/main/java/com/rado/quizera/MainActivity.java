@@ -3,22 +3,12 @@ package com.rado.quizera;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 
-import android.app.AlarmManager;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.media.RingtoneManager;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -31,7 +21,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.rado.quizera.Common.Common;
 import com.rado.quizera.Model.User;
 
-import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity {
     private static final String CHANNEL_ID = "BAIGOSHO";
@@ -49,10 +38,10 @@ public class MainActivity extends AppCompatActivity {
         db = FirebaseDatabase.getInstance();
         users = db.getReference("Users");
 
-        username = (EditText) findViewById(R.id.fieldUsername);
-        password = (EditText) findViewById(R.id.fieldPassword);
-        btnSignIn = (Button) findViewById(R.id.btn_signIn);
-        btnSignUp = (Button) findViewById(R.id.btn_signUp);
+        username = findViewById(R.id.fieldUsername);
+        password = findViewById(R.id.fieldPassword);
+        btnSignIn = findViewById(R.id.btn_signIn);
+        btnSignUp = findViewById(R.id.btn_signUp);
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -101,26 +90,26 @@ public class MainActivity extends AppCompatActivity {
 
     private void showSignUpDialog() {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
-        alertDialog.setTitle("Sign Up");
-        alertDialog.setMessage("Please fill in your information");
+        alertDialog.setTitle("РЕГИСТРАЦИЯ");
+        alertDialog.setMessage("Моля попълнете следните полете:");
 
         LayoutInflater inflater = this.getLayoutInflater();
         View signUp_layout = inflater.inflate(R.layout.sign_up_layout, null);
 
-        registerUsername = (EditText) signUp_layout.findViewById(R.id.registerUsername);
-        registerEmail = (EditText) signUp_layout.findViewById(R.id.registerEmail);
-        registerPassword = (EditText) signUp_layout.findViewById(R.id.registerPassword);
+        registerUsername =  signUp_layout.findViewById(R.id.registerUsername);
+        registerEmail =  signUp_layout.findViewById(R.id.registerEmail);
+        registerPassword =  signUp_layout.findViewById(R.id.registerPassword);
 
         alertDialog.setView(signUp_layout);
         alertDialog.setIcon(R.drawable.ic_account_circle_black_24dp);
 
-        alertDialog.setNegativeButton("NO", new DialogInterface.OnClickListener() {
+        alertDialog.setNegativeButton("ОТКАЗ", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
             }
         });
-        alertDialog.setPositiveButton("YES", new DialogInterface.OnClickListener() {
+        alertDialog.setPositiveButton("РЕГИСТРАЦИЯ", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 final User user = new User(registerUsername.getText().toString(), registerPassword.getText().toString(), registerEmail.getText().toString());
@@ -132,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
                             Toast.makeText(MainActivity.this, "User already exists!", Toast.LENGTH_LONG).show();
                         } else {
                             users.child(user.getUsername()).setValue(user);
-                            Toast.makeText(MainActivity.this, "Registration successfull!", Toast.LENGTH_LONG).show();
+                            Toast.makeText(MainActivity.this, "Registration successful!", Toast.LENGTH_LONG).show();
                         }
                     }
 

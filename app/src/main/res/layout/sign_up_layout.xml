@@ -11,7 +11,7 @@
         android:orientation="vertical">
         <EditText
             android:id="@+id/registerUsername"
-            android:hint="Username"
+            android:hint="Потребителско име"
             android:inputType="text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -27,7 +27,7 @@
             android:textSize="24sp" />
         <EditText
             android:id="@+id/registerPassword"
-            android:hint="Password"
+            android:hint="Парола"
             android:inputType="textPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
