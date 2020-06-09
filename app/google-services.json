@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "539909336256",
+    "firebase_url": "https://quizera-7a246.firebaseio.com",
+    "project_id": "quizera-7a246",
+    "storage_bucket": "quizera-7a246.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:539909336256:android:cdc9cb1170b43bbe24d125",
+        "android_client_info": {
+          "package_name": "com.rado.quizera"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "539909336256-v1tvsq2d82ndtr4lr91kfrimi3ddbsq5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.rado.quizera",
+            "certificate_hash": "4113a69ca1c3beed90a70acb520d593ca37c2cb2"
+          }
+        },
+        {
+          "client_id": "539909336256-6eorjqhjhqlvechvi4rvpgqh9n95j1i2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD4xfN2onEnFTiMWK-3B1ormTQTpwkyGfA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "539909336256-6eorjqhjhqlvechvi4rvpgqh9n95j1i2.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
