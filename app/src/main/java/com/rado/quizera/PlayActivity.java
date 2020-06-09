@@ -40,7 +40,6 @@ public class PlayActivity extends AppCompatActivity implements View.OnClickListe
         setContentView(R.layout.activity_play);
 
 
-        //views
         txtScore = findViewById(R.id.txtScore);
         txtQuestionNum = findViewById(R.id.txtTotalQuestions);
         questionText = findViewById(R.id.question_text);

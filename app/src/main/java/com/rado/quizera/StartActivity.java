@@ -57,6 +57,7 @@ public class StartActivity extends AppCompatActivity {
                     Question question = postSnapshot.getValue(Question.class);
                     Common.questionList.add(question);
                 }
+                Collections.shuffle(Common.questionList);
             }
 
             @Override
@@ -64,6 +65,6 @@ public class StartActivity extends AppCompatActivity {
 
             }
         });
-        Collections.shuffle(Common.questionList);
+        //Collections.shuffle(Common.questionList);
     }
 }
