@@ -65,6 +65,5 @@ public class StartActivity extends AppCompatActivity {
 
             }
         });
-        //Collections.shuffle(Common.questionList);
     }
 }
