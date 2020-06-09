@@ -31,7 +31,7 @@ Contains best scores of all players.
   * QuestionScore.class
   * Ranking.class
   * User.class
-* ViewHolder
+* ViewHolder | All of the classes below are used for the RecyclerViews
   * CategoryViewHolder
   * RankingViewHolder
   * ScoreDetailsViewHolder
