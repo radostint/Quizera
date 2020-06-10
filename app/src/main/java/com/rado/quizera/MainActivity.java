@@ -1,6 +1,7 @@
 package com.rado.quizera;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -13,22 +14,29 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.rado.quizera.Common.Common;
 import com.rado.quizera.Model.User;
 
 
 public class MainActivity extends AppCompatActivity {
-    private static final String CHANNEL_ID = "BAIGOSHO";
-    EditText registerUsername, registerEmail, registerPassword;
-    EditText username, password;
-    Button btnSignUp, btnSignIn;
+    private static final int RC_SIGN_IN = 1358;
+    EditText registerUsername;
     FirebaseDatabase db;
     DatabaseReference users;
+    GoogleSignInClient mGoogleSignInClient;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,67 +46,46 @@ public class MainActivity extends AppCompatActivity {
         db = FirebaseDatabase.getInstance();
         users = db.getReference("Users");
 
-        username = findViewById(R.id.fieldUsername);
-        password = findViewById(R.id.fieldPassword);
-        btnSignIn = findViewById(R.id.btn_signIn);
-        btnSignUp = findViewById(R.id.btn_signUp);
-        btnSignUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showSignUpDialog();
-            }
-        });
 
-        btnSignIn.setOnClickListener(new View.OnClickListener() {
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN).requestEmail().build();
+        mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+
+        SignInButton signInButton = findViewById(R.id.sign_in_button);
+        signInButton.setSize(SignInButton.SIZE_WIDE);
+        signInButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                signIn(username.getText().toString(), password.getText().toString());
+                signIn();
             }
         });
     }
 
-
-    private void signIn(final String user, final String pass) {
-        users.addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if (dataSnapshot.child(user).exists()) {
-                    if (!user.isEmpty()) {
-                        User loginUser = dataSnapshot.child(user).getValue(User.class);
-                        if (loginUser.getPassword().equals(pass)) {
-                            Common.currentUser = loginUser;
-                            Intent intent = new Intent(MainActivity.this, HomeActivity.class);
-                            startActivity(intent);
-                            finish();
-                        } else {
-                            Toast.makeText(MainActivity.this, "Login failed!", Toast.LENGTH_LONG).show();
-                        }
-                    } else {
-                        Toast.makeText(MainActivity.this, "Please enter your username", Toast.LENGTH_LONG).show();
-                    }
-                } else {
-                    Toast.makeText(MainActivity.this, "User does not exist!", Toast.LENGTH_LONG).show();
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        // Result returned from launching the Intent from GoogleSignInClient.getSignInIntent(...);
+        if (requestCode == RC_SIGN_IN) {
+            // The Task returned from this call is always completed, no need to attach
+            // a listener.
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            handleSignInResult(task);
+        }
     }
 
-    private void showSignUpDialog() {
+    private void signIn() {
+        Intent signInIntent = mGoogleSignInClient.getSignInIntent();
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+
+    private void signUp(final String googleEmail) {
         AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
-        alertDialog.setTitle("РЕГИСТРАЦИЯ");
-        alertDialog.setMessage("Моля попълнете следните полете:");
+        alertDialog.setTitle("Нов потребител");
+        alertDialog.setMessage("Изберете потребителско име:");
 
         LayoutInflater inflater = this.getLayoutInflater();
         View signUp_layout = inflater.inflate(R.layout.sign_up_layout, null);
 
-        registerUsername =  signUp_layout.findViewById(R.id.registerUsername);
-        registerEmail =  signUp_layout.findViewById(R.id.registerEmail);
-        registerPassword =  signUp_layout.findViewById(R.id.registerPassword);
+        registerUsername = signUp_layout.findViewById(R.id.registerUsername);
 
         alertDialog.setView(signUp_layout);
         alertDialog.setIcon(R.drawable.ic_account_circle_black_24dp);
@@ -109,19 +96,19 @@ public class MainActivity extends AppCompatActivity {
                 dialog.dismiss();
             }
         });
-        alertDialog.setPositiveButton("РЕГИСТРАЦИЯ", new DialogInterface.OnClickListener() {
+        alertDialog.setPositiveButton("ГОТОВО", new DialogInterface.OnClickListener() {
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                final User user = new User(registerUsername.getText().toString(), registerPassword.getText().toString(), registerEmail.getText().toString());
+            public void onClick(final DialogInterface dialog, int which) {
+                final User user = new User(registerUsername.getText().toString(), googleEmail);
 
                 users.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if (dataSnapshot.child(user.getUsername()).exists()) {
-                            Toast.makeText(MainActivity.this, "User already exists!", Toast.LENGTH_LONG).show();
+                            Toast.makeText(MainActivity.this, "Потребителското име е заето!", Toast.LENGTH_LONG).show();
                         } else {
                             users.child(user.getUsername()).setValue(user);
-                            Toast.makeText(MainActivity.this, "Registration successful!", Toast.LENGTH_LONG).show();
+                            Toast.makeText(MainActivity.this, "Регистрация успешна!", Toast.LENGTH_LONG).show();
                         }
                     }
 
@@ -134,5 +121,49 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         alertDialog.show();
+    }
+
+    private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
+        try {
+            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
+
+            // Signed in successfully, show authenticated UI.
+            updateUI(account);
+        } catch (ApiException e) {
+            // The ApiException status code indicates the detailed failure reason.
+            // Please refer to the GoogleSignInStatusCodes class reference for more information.
+            updateUI(null);
+        }
+    }
+
+    private void updateUI(final GoogleSignInAccount account) {
+        if (account != null) {
+
+            Query query = users.orderByChild("email").equalTo(account.getEmail()).limitToFirst(1);
+            query.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+
+                            User currentUser = userSnapshot.getValue(User.class);
+                            Common.currentUser = currentUser;
+                            Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+                            startActivity(intent);
+                            finish();
+                        }
+                    } else {
+                        signUp(account.getEmail());
+                    }
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+
+                }
+            });
+        } else {
+            Toast.makeText(MainActivity.this, "Нещо се обърка. Моля опитайте отново.", Toast.LENGTH_LONG).show();
+        }
     }
 }

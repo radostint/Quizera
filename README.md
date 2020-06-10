@@ -19,9 +19,11 @@ When player clicks on a certain username in the RankingFragment he can see their
 
 ## Fragments
 ### Category Fragment
-Contains all playable quizzes(categories).
+Shows all playable quizzes(categories).
 ### Ranking Fragment
-Contains best scores of all players.
+Shows best scores of all players.
+### Profile fragment
+Shows information about current user.
 ## Other classes
 * Common
   * Common.class |    Used for storing global variables.
