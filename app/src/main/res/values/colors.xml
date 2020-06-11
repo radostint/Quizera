@@ -4,4 +4,8 @@
     <color name="colorPrimaryDark">#030516</color>
     <color name="colorAccent">#565866</color>
     <color name="bankGreen">#52AE30</color>
+    <color name="mint">#128172</color>
+    <color name="darkBlueGray">#2F4858</color>
+    <color name="currentUserInRanking">#fce42b</color>
+    <color name="rankingStar">#d47c24</color>
 </resources>

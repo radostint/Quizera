@@ -9,9 +9,8 @@
         android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:padding="16dp"
-        app:cardBackgroundColor="@color/colorPrimaryDark"
+        android:layout_marginBottom="16dp"
+        app:cardBackgroundColor="@color/darkBlueGray"
         app:cardElevation="4dp">
 
         <LinearLayout
@@ -19,9 +18,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:gravity="center"
+            android:padding="8dp"
             android:orientation="horizontal"
-            android:weightSum="10"
-            android:background="@color/bankGreen">
+            android:weightSum="10">
 
             <TextView
                 android:layout_width="0dp"

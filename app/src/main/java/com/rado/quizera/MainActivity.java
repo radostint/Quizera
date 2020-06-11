@@ -10,7 +10,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -29,6 +28,9 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.rado.quizera.Common.Common;
 import com.rado.quizera.Model.User;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -78,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void signUp(final String googleEmail) {
-        AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
+        final AlertDialog.Builder alertDialog = new AlertDialog.Builder(this);
         alertDialog.setTitle("Нов потребител");
         alertDialog.setMessage("Изберете потребителско име:");
 
@@ -99,24 +101,36 @@ public class MainActivity extends AppCompatActivity {
         alertDialog.setPositiveButton("ГОТОВО", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(final DialogInterface dialog, int which) {
-                final User user = new User(registerUsername.getText().toString(), googleEmail);
+                String username = registerUsername.getText().toString();
+                String[] chars = {".", ",", "$", "[", "]"};
+                boolean containsSpecialCharacters = false;
+                for (int i = 0; i < chars.length; i++) {
+                    if (username.contains(chars[i])) {
+                        containsSpecialCharacters = true;
+                    }
+                }
+                if (containsSpecialCharacters) {
+                    Toast.makeText(MainActivity.this, "Потребителското име не трябва да съдържа специални символи като: .,#,$,[, или ]", Toast.LENGTH_LONG).show();
+                } else {
+                    final User user = new User(username, googleEmail);
 
-                users.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        if (dataSnapshot.child(user.getUsername()).exists()) {
-                            Toast.makeText(MainActivity.this, "Потребителското име е заето!", Toast.LENGTH_LONG).show();
-                        } else {
-                            users.child(user.getUsername()).setValue(user);
-                            Toast.makeText(MainActivity.this, "Регистрация успешна!", Toast.LENGTH_LONG).show();
+                    users.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.child(user.getUsername()).exists()) {
+                                Toast.makeText(MainActivity.this, "Потребителското име е заето!", Toast.LENGTH_LONG).show();
+                            } else {
+                                users.child(user.getUsername()).setValue(user);
+                                Toast.makeText(MainActivity.this, "Регистрация успешна!", Toast.LENGTH_LONG).show();
+                            }
                         }
-                    }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
 
-                    }
-                });
+                        }
+                    });
+                }
                 dialog.dismiss();
             }
         });
@@ -163,7 +177,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
         } else {
-            Toast.makeText(MainActivity.this, "Нещо се обърка. Моля опитайте отново.", Toast.LENGTH_LONG).show();
+            Toast.makeText(MainActivity.this, "Моля опитайте отново.", Toast.LENGTH_LONG).show();
         }
     }
 }

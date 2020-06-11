@@ -1,6 +1,7 @@
 package com.rado.quizera;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -13,6 +14,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DataSnapshot;
@@ -29,11 +31,6 @@ import com.rado.quizera.Model.Ranking;
 import com.rado.quizera.ViewHolder.RankingViewHolder;
 
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link RankingFragment#newInstance} factory method to
- * create an instance of this fragment.
- */
 public class RankingFragment extends Fragment {
     View fragment;
 
@@ -83,7 +80,12 @@ public class RankingFragment extends Fragment {
             protected void populateViewHolder(RankingViewHolder viewHolder, final Ranking model, int i) {
                 viewHolder.rankingName.setText(model.getUsername());
                 viewHolder.rankingScore.setText(String.valueOf(model.getScore()));
+                if (model.getUsername().equals(Common.currentUser.getUsername())) {
+                    viewHolder.itemView.setBackgroundResource(R.color.currentUserInRanking);
+                    viewHolder.rankingName.setTextColor(Color.BLACK);
+                    viewHolder.rankingScore.setTextColor(Color.BLACK);
 
+                }
                 viewHolder.setItemClickListener(new ItemClickListener() {
                     @Override
                     public void onClick(View view, int position, boolean isLongClick) {

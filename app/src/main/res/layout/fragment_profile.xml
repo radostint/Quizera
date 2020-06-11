@@ -1,36 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <RelativeLayout
+        android:id="@+id/layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/layout">
+        android:layout_height="match_parent">
 
 
         <ImageView
             android:id="@+id/header"
             android:layout_width="match_parent"
-            android:layout_height="250dp"
+            android:layout_height="150dp"
             android:background="?attr/selectableItemBackgroundBorderless"
-            android:src="@color/bankGreen"/>
+            android:src="@color/mint"/>
 
         <de.hdodenhof.circleimageview.CircleImageView
-            app:civ_border_width="3dp"
-            app:civ_border_color="#FFFFFFFF"
             android:id="@+id/profile_image"
             android:layout_width="200dp"
             android:layout_height="200dp"
             android:layout_below="@+id/header"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="-145dp"
+            android:layout_marginTop="-120dp"
             android:elevation="5dp"
             android:padding="20dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/bg_vertical" />
+            android:src="@drawable/bg_vertical"
+            app:civ_border_color="#FFFFFFFF"
+            app:civ_border_width="3dp" />
 
         <RelativeLayout
             android:id="@+id/profile_layout"
@@ -51,17 +50,37 @@
                 android:textColor="#fff"
                 android:textSize="24sp"
                 android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/username"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/full_name"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="10dp"
+                android:text="sample username"
+                android:textColor="@android:color/white"
+                android:textSize="15sp" />
+
             <TextView
                 android:id="@+id/email"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/username"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="10dp"
                 android:text="email@sample.com"
                 android:textColor="@android:color/white"
-                android:textSize="15sp"
-                android:layout_below="@id/full_name"/>
+                android:textSize="15sp" />
 
+            <Button
+                android:id="@+id/sign_out_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/email"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="150dp"
+                android:text="Изход" />
         </RelativeLayout>
 
     </RelativeLayout>
